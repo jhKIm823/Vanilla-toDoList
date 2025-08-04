@@ -1,0 +1,33 @@
+:root {
+    --white: #fff;
+    --main: #eaedf0;
+    --background: #2c2b33;
+}
+
+body {
+    background: var(--main);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background: var(--background);
+    color: var(--white);
+    padding: 16px;
+    border-radius: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.month, .buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
