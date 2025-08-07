@@ -8,15 +8,15 @@ let days = document.querySelector('.days');         // 날짜
 let date = new Date();
 
 // 오늘 년,월,일
-const year = date.getFullYear();
-const month = date.getMonth();
-const day = date.getDate();
+let year = date.getFullYear();
+let month = date.getMonth();
+let day = date.getDate();
 
 
 
 // 월, 일 포맷
 function rendDisplay() {
-    display.innerHTML = month + 1;
+    display.innerHTML = month + 1 + '월';
     today.innerHTML = day;
 }
 
@@ -26,7 +26,7 @@ rendDisplay();
 function rendDays() {
     // 첫번째 날짜
     const firstDay = new Date(year, month, 1);
-    // 마지막 요일 - 0:일 ~ 6:토
+    // 첫번째 요일 - 0:일 ~ 6:토
     const firstDayIndex = firstDay.getDay();
     // 마지막 날짜
     const lastDay = new Date(year, month + 1, 0).getDate();
@@ -34,15 +34,38 @@ function rendDays() {
     // 첫번째 요일 시작 전까지 빈칸 삽입
     for (let i = 0; i < firstDayIndex; i++) {
         const empty = document.createElement('div');
+
         days.appendChild(empty);
     }
 
     //날짜 삽입
-        for (let i = 1; i <= lastDay; i++) {
+    for (let i = 1; i <= lastDay; i++) {
         const day = document.createElement('div');
+
+        let child = days.children;
+
         day.textContent = i;
         days.appendChild(day);
     }
 }
 
 rendDays();
+
+// 지난달 클릭
+prevBtn.addEventListener("click", function(){
+    month = month - 1;
+
+    days.innerHTML = '';
+
+    rendDisplay();
+    rendDays();
+});
+
+nextBtn.addEventListener("click", function() {
+    month = month + 1;
+
+    days.innerHTML = '';
+
+    rendDisplay();
+    rendDays();    
+});
