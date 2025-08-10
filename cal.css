@@ -13,7 +13,7 @@ body {
 }
 
 .container {
-    background: var(--background);
+    background: rgba(44, 43, 51, 0.85);
     color: var(--white);
     padding: 16px;
     border-radius: 20px;
@@ -46,7 +46,7 @@ header {
 
 .buttons {
     div {
-        padding: 0 10px;
+        /* padding: 3px; */
     }
 
     div > * {
@@ -63,6 +63,26 @@ header {
     div {
         display: flex;
         justify-content: center;
-        padding: 7px;
     }
+}
+
+.days > div {
+    cursor: pointer;
+    padding: 7px;
+    /* 기본 테두리 투명 */
+    border: 1px solid transparent;
+}
+
+.days > div.sun {
+    color: red;
+}
+
+.days > div.sat {
+    color: blue;
+}
+
+#btnToday {
+    padding: 3px;
+    border: 2px solid var(--main);
+    border-radius: 5px;
 }
