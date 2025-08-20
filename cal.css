@@ -66,11 +66,17 @@ header {
     }
 }
 
+.days {
+    height: 350px;
+}
+
 .days > div {
     cursor: pointer;
-    padding: 7px;
+    /* padding: 5px 10px; */
     /* 기본 테두리 투명 */
     border: 1px solid transparent;
+    height: auto;
+    width: 55px;
 }
 
 .days > div.sun {

@@ -16,7 +16,14 @@ let day = date.getDate();
 
 // 월, 일 포맷
 function rendDisplay() {
-    display.innerHTML = month + 1 + '월';
+    let currentYear = date.getFullYear();
+
+    if (year != currentYear) {
+        display.innerHTML = year + '년 ' + (month + 1) + '월';
+    } else {
+        display.innerHTML = (month + 1) + '월';
+    }
+    
     today.innerHTML = day;
 }
 
@@ -54,6 +61,7 @@ function rendDays() {
         day.textContent = i;
         days.appendChild(day);
     }
+
 }
 
 rendDays();
@@ -61,6 +69,11 @@ rendDays();
 // 지난달 클릭
 prevBtn.addEventListener("click", function(){
     month = month - 1;
+
+    if (month < 0) {
+        month = 11; // 12월로 설정
+        year = year - 1; // 년도 감소
+    }
 
     days.innerHTML = '';
 
@@ -71,6 +84,11 @@ prevBtn.addEventListener("click", function(){
 // 다음달 클릭
 nextBtn.addEventListener("click", function() {
     month = month + 1;
+
+    if (month > 11) {
+        month = 0; // 1월로 설정
+        year = year + 1; // 년도 감소
+    }
 
     days.innerHTML = '';
 
@@ -92,7 +110,7 @@ days.addEventListener("click", function(e) {
 
         // 클릭된 날짜 테두리 적용
         e.target.style.borderColor = 'var(--main)';
-        e.target.style.borderRadius = '3px';
+        e.target.style.borderRadius = '7px';
     }
 });
 
@@ -115,7 +133,7 @@ today.addEventListener("click", function() {
 
         if (d.textContent == day) {
             d.style.borderColor = 'var(--main)';
-            d.style.borderRadius = '3px';
+            d.style.borderRadius = '7px';
         }
     });
 });
