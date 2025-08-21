@@ -1,9 +1,12 @@
 // 선택자 선언
-let display = document.querySelector('.display');   // 현재 월
-let prevBtn = document.querySelector('.prev');      // 지난달 버튼
-let nextBtn = document.querySelector('.next');      // 다음달 버튼
-let today = document.querySelector('#btnToday span'); 
-let days = document.querySelector('.days');         // 날짜
+let display = document.querySelector('.display');       // 현재 월
+let prevBtn = document.querySelector('.prev');          // 지난달 버튼
+let nextBtn = document.querySelector('.next');          // 다음달 버튼
+let days = document.querySelector('.days');             // 날짜
+
+let today = document.querySelector('#btnToday span');   // 오늘 날짜 버튼
+let everyBtn = document.querySelector('#btnEvery');     // 매일 일정 버튼
+let addBtn = document.querySelector('#btnAdd');         // 일정 추가 버튼
 
 let date = new Date();
 
@@ -87,7 +90,7 @@ nextBtn.addEventListener("click", function() {
 
     if (month > 11) {
         month = 0; // 1월로 설정
-        year = year + 1; // 년도 감소
+        year = year + 1; // 년도 증가
     }
 
     days.innerHTML = '';
@@ -136,4 +139,9 @@ today.addEventListener("click", function() {
             d.style.borderRadius = '7px';
         }
     });
+});
+
+// 모든날에 일정 추가
+everyBtn.addEventListener("click", function() {
+    
 });

@@ -5,7 +5,7 @@
 }
 
 body {
-    background: var(--main);
+    background: var(--white);
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -13,6 +13,7 @@ body {
 }
 
 .container {
+    position: static;
     background: rgba(44, 43, 51, 0.85);
     color: var(--white);
     padding: 16px;
@@ -45,8 +46,8 @@ header {
 }
 
 .buttons {
-    div {
-        /* padding: 3px; */
+    div:hover {
+        color: rgb(157, 168, 201)
     }
 
     div > * {
@@ -91,4 +92,26 @@ header {
     padding: 3px;
     border: 2px solid var(--main);
     border-radius: 5px;
+}
+
+
+.modal {
+    /* position: absolute; */
+    width: 40%;
+    height: 50vh;
+    background-color: #3975b1;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.modal-content {
+    background-color: #ffffff;
+}
+
+.modal-header {
+
+}
+
+.modal-content {
+
 }
