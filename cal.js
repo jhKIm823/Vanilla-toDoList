@@ -141,7 +141,8 @@ today.addEventListener("click", function() {
     });
 });
 
-// 모든날에 일정 추가
+// 매일 일정추가 모달 팝업
 everyBtn.addEventListener("click", function() {
-    
+    let maodal = document.querySelector('.modal');
+    maodal.style.display = 'block';
 });
