@@ -13,7 +13,7 @@ body {
 }
 
 .container {
-    position: static;
+    position: relative;
     background: rgba(44, 43, 51, 0.85);
     color: var(--white);
     padding: 16px;
@@ -99,12 +99,16 @@ header {
 .modal {
     display: none;
     position: absolute;
-    width: 20vw;
-    height: 40vh;
-    background-color: #3975b1;
-    padding: 20px;
-    border-radius: 20px;
+    inset: 0;
+    background-color: rgb(76, 91, 221, 15%); /* 반투명 배경 */
+    padding: 25px;
+    border-radius: inherit;   /* 컨테이너와 동일 라운드 */
+    box-sizing: border-box;   /* 패딩 포함해서 크기 유지 */
+    color: #636363;
 }
+
+/* 모달 토글 */
+.modal.open { display: block; }
 
 .modal-content {
     background-color: #ffffff;
@@ -112,6 +116,7 @@ header {
     display: flex;            /* 헤더/바디 세로 배치 */
     flex-direction: column;
     border-radius: 12px;
+    /* overflow : 요소가 넘어갔을때 처리 */
     overflow: hidden;         /* 라운드 보존 */
 }
 
@@ -120,6 +125,14 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
+}
+
+/* 바디만 스크롤 */
+.modal-body {
+    flex: 1;                    /* 헤더 제외한 나머지 공간 모두 차지 */
+    min-height: 0;              /* flex 아이템 수축 허용(스크롤 활성에 중요) */   
+    overflow: auto;             /* 리스트 많아지면 스크롤 */
+    padding: 0 16px;
 }
 
 h2 {
@@ -141,44 +154,84 @@ h2 {
     cursor: pointer;
 }
 
-.modal-content {
-    flex: 1;                    /* 남은 공간 전부 사용 */
-    min-height: 0;              /* flex 아이템 수축 허용(스크롤 활성에 중요) */
-    overflow: auto;             /* 리스트 많아지면 스크롤 */
-    padding: 0px 16px;
-}
-
 .everyList {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 8px;
 }
 
-[type="checkbox"] {
-    display: none;
-}
-
-input[type="checkbox"] + label{
-    display: inline-block;
+/* 1) 네이티브 체크박스: 접근성 유지하며 시각만 숨김 */
+.elItem {
     position: relative;
-    padding-left:30px;
 }
-input[type="checkbox"] + label::before{
-    display:block;
-    content:'';
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-    line-height:20px;
-    text-align: center;
+.elItem input[type="checkbox"] {
     position: absolute;
-    left: 0;
-    top:0;
-    border:1px solid #ddd;
-    border-radius: 50%;
-    color:rgb(76, 91, 221);
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
-input[type="checkbox"]:checked + label::before{
-    content:'✔';
+/* 2) 라벨 베이스: 회색 배경의 라운드 칩(첫 번째 이미지 느낌) */
+.elItem label {
+    display: inline-flex;          /* ::before(아이콘) + 텍스트 + ::after(라인) */
+    align-items: center;
+    gap: 10px;
+    
+    color: #374151;
+    font-size: 14px;
+    line-height: 1.4;
+    cursor: pointer;               /* 비편집 상태는 포인터 */
+    transition: background .15s ease, color .15s ease, opacity .15s ease;
+}
+
+/* 3) 아이콘(미체크): 머티리얼 심볼 - 동그라미 */
+.elItem input[type="checkbox"] + label::before {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  content: "radio_button_unchecked"; 
+  line-height: 1;
+  display: inline-block;
+  color: #c8ccd5;                      /* 옅은 회색 */
+  transform: translateY(0.5px);
+  transition: color .15s ease, content .15s ease;
+}
+
+/* 4) 체크 상태: 파란 체크 + 텍스트 회색 + 취소선 + 오른쪽 라인 확장(두 번째 이미지 느낌) */
+.elItem input[type="checkbox"]:checked + label {
+  color: #9aa2af;                         /* 텍스트 연해짐 */
+  text-decoration: line-through;            /* 취소선 */
+  text-decoration-color: #cfd4dc;
+  text-decoration-thickness: 2px;
+}
+.elItem input[type="checkbox"]:checked + label::before {
+  content: "done";
+  color: #5b74f2;
+}
+/* 체크 시 텍스트 뒤로 오른쪽으로 이어지는 얇은 라인 */
+.elItem input[type="checkbox"]:checked + label::after {
+  content: "";
+  height: 1px;
+  background: #d0d5dd;
+  flex: 1;                              /* 남은 공간을 가로로 채움 */
+  margin-left: 8px;
+  transform: translateY(0.5px);
+}
+
+/* 5) 키보드 포커스 링(접근성) — 체크박스에 포커스가 가면 아이콘에 링 표시 */
+.elItem input[type="checkbox"]:focus-visible + label::before {
+  outline: 2px solid #5b74f2;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* 6) 편집 모드일 때(원하시면): 배경/취소선 제거 + 커서 텍스트 */
+.everyList.editing .elItem label {
+  background: transparent;
+  box-shadow: none;
+  text-decoration: none;
+  cursor: text;                        /* 편집 커서 */
+}
+.everyList.editing .elItem label::before,
+.everyList.editing .elItem label::after {
+  content: "";                         /* 아이콘/라인 숨김 */
 }
