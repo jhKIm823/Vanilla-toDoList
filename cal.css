@@ -157,13 +157,43 @@ h2 {
 .everyList {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    /* align-items: center; */
+    align-items: flex-start;
 }
 
-/* 1) 네이티브 체크박스: 접근성 유지하며 시각만 숨김 */
+/* 네이티브 체크박스: 접근성 유지하며 시각만 숨김 */
 .elItem {
-    position: relative;
+    /* position: relative; */
+    display: flex;
+    align-items: center;    /* 세로 중앙정렬(원하면 flex-start) */
+    gap: 8px;
 }
+
+/* 텍스트 줄바꿈  */
+.elItem > label {
+    /* flex: 1 1 auto;  
+    min-width: 0;        
+    white-space: normal; 
+    overflow-wrap: anywhere; */
+
+    /* 공백 문자(스페이스, 탭, 줄바꿈 등)를 어떻게 처리하고, 텍스트를 줄바꿈할지 여부 */
+    white-space: normal; 
+
+    /* 요소의 콘텐츠가 요소의 크기를 초과할 때 어떻게 처리할지 지정 */
+    /* overflow-wrap은 white-space 속성의 설정에 따라 동작 */
+    overflow-wrap: anywhere;
+}
+
+/* 버튼 묶음: 고정 영역, 줄바꿈 금지 */
+.elBtn{
+    flex: 0 0 auto;
+    display: flex;
+    
+    gap: 6px;
+    /* white-space: nowrap; */
+}
+
+/* 체크박스 사각형 숨기고 포커스/접근성 유지 */
 .elItem input[type="checkbox"] {
     position: absolute;
     opacity: 0;
@@ -171,67 +201,60 @@ h2 {
     height: 0;
 }
 
-/* 2) 라벨 베이스: 회색 배경의 라운드 칩(첫 번째 이미지 느낌) */
-.elItem label {
-    display: inline-flex;          /* ::before(아이콘) + 텍스트 + ::after(라인) */
-    align-items: center;
-    gap: 10px;
+/* 커스텀 체크박스 + 라벨 꾸미기 */
+/* 라벨을 체크박스 대신 클릭 가능 */
+.elItem input[type="checkbox"] + label{
+    display: inline-block;
+    position: relative;
+    text-decoration: underline;
+    text-decoration-thickness: 1.3px;       /* 취소선 두께를 1.3px로 설정 */
+    text-underline-offset: 5px;             /* 텍스트와 밑줄 사이의 간격 */
     
-    color: #374151;
-    font-size: 14px;
-    line-height: 1.4;
-    cursor: pointer;               /* 비편집 상태는 포인터 */
-    transition: background .15s ease, color .15s ease, opacity .15s ease;
+    padding-left:28px;                      /* 아이콘(20px) + 간격(8px) */
+    line-height:1.4;
+
+    cursor: pointer;
 }
 
-/* 3) 아이콘(미체크): 머티리얼 심볼 - 동그라미 */
+/* 체크박스 커스텀 */
 .elItem input[type="checkbox"] + label::before {
-  font-family: 'Material Symbols Outlined';
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-  content: "radio_button_unchecked"; 
-  line-height: 1;
-  display: inline-block;
-  color: #c8ccd5;                      /* 옅은 회색 */
-  transform: translateY(0.5px);
-  transition: color .15s ease, content .15s ease;
+    font-family: 'Material Symbols Outlined';
+    content: "radio_button_unchecked";
+    font-size: 20px;
+    line-height: 1;
+    display: inline-block;
+    color: #374151;
+
+    position:absolute;
+    left:0;
+    top:50%;
+    transform:translateY(-50%);
 }
 
-/* 4) 체크 상태: 파란 체크 + 텍스트 회색 + 취소선 + 오른쪽 라인 확장(두 번째 이미지 느낌) */
-.elItem input[type="checkbox"]:checked + label {
-  color: #9aa2af;                         /* 텍스트 연해짐 */
-  text-decoration: line-through;            /* 취소선 */
-  text-decoration-color: #cfd4dc;
-  text-decoration-thickness: 2px;
+/* 체크할때 라벨 */
+input[type="checkbox"]:checked + label {
+    text-decoration: line-through;            /* 텍스트 취소선 스타일 */
+    text-decoration-thickness: 1.3px;         /* 취소선 두께를 3px로 설정 */
+    color: #9aa2af;
 }
+
+/* 체크 된 체크박스 커스텀 */
 .elItem input[type="checkbox"]:checked + label::before {
   content: "done";
-  color: #5b74f2;
-}
-/* 체크 시 텍스트 뒤로 오른쪽으로 이어지는 얇은 라인 */
-.elItem input[type="checkbox"]:checked + label::after {
-  content: "";
-  height: 1px;
-  background: #d0d5dd;
-  flex: 1;                              /* 남은 공간을 가로로 채움 */
-  margin-left: 8px;
-  transform: translateY(0.5px);
+  color: #5b74f2; 
 }
 
-/* 5) 키보드 포커스 링(접근성) — 체크박스에 포커스가 가면 아이콘에 링 표시 */
-.elItem input[type="checkbox"]:focus-visible + label::before {
-  outline: 2px solid #5b74f2;
-  outline-offset: 2px;
-  border-radius: 4px;
+/* label 편집모드  */
+.elItem label[contenteditable="true"] {
+    border: none;
+    outline: none;
+
+    /* 텍스트 커서 표시 */
+    cursor: text;
 }
 
-/* 6) 편집 모드일 때(원하시면): 배경/취소선 제거 + 커서 텍스트 */
-.everyList.editing .elItem label {
-  background: transparent;
-  box-shadow: none;
-  text-decoration: none;
-  cursor: text;                        /* 편집 커서 */
-}
-.everyList.editing .elItem label::before,
-.everyList.editing .elItem label::after {
-  content: "";                         /* 아이콘/라인 숨김 */
+.elItem input[type="checkbox"]:checked + label::after{
+  bottom:auto;
+  top:50%; transform:translateY(-50%);  /* 취소선 */
+  opacity:1;
 }
