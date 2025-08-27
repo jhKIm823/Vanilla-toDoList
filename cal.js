@@ -30,7 +30,7 @@ function rendDisplay() {
     today.textContent  = day;
 }
 
-rendDisplay();
+
 
 // 일자 포맷
 function rendDays() {
@@ -67,7 +67,24 @@ function rendDays() {
 
 }
 
+// 오늘 날짜에 테두리 적용
+function highlightToday() {
+    // 모든 날짜 테두리 초기화 후 오늘 날짜 테두리 적용
+    document.querySelectorAll('.days > .day').forEach(d => {
+        d.style.borderColor = 'transparent';
+        d.style.borderRadius = '';
+
+        if (d.textContent == day) {
+            d.style.borderColor = 'var(--main)';
+            d.style.borderRadius = '7px';
+        }
+    });
+}
+
+
+rendDisplay();
 rendDays();
+highlightToday();
 
 // 지난달 클릭
 prevBtn.addEventListener("click", function(){
@@ -129,7 +146,7 @@ today.addEventListener("click", function() {
     rendDisplay();
     rendDays();
 
-    // 모든 날짜 테두리 초기화
+    // 모든 날짜 테두리 초기화 후 오늘 날짜 테두리 적용
     document.querySelectorAll('.days > .day').forEach(d => {
         d.style.borderColor = 'transparent';
         d.style.borderRadius = '';
@@ -141,9 +158,9 @@ today.addEventListener("click", function() {
     });
 });
 
-// ****************** modal *************************************************************************************
-const plusBtn = document.querySelector('.plus-btn');
-const modalBody = document.querySelector('.modal .modal-body');
+// ******************반복일정 modal *************************************************
+const dailyPlusBtn = document.querySelector('#dailyPlus');
+const dailyModalBody = document.querySelector('#daily-modal .modal-body');
 
 
 // 매일 일정추가 모달 팝업
@@ -157,9 +174,9 @@ document.addEventListener('click', (e) => {
 });
 
 // 일정 추가
-plusBtn.addEventListener("click", function() {
-    // 모달바디의 마지막 자식요
-    const lastList = modalBody.lastElementChild;
+dailyPlusBtn.addEventListener("click", function() {
+    // 모달바디의 마지막 자식요소
+    const lastList = dailyModalBody.lastElementChild;
     const lastLabel = lastList ? lastList.querySelector('label') : null;
 
     // 입력값 체크
@@ -209,7 +226,7 @@ plusBtn.addEventListener("click", function() {
     elBtn.append(saveBtn, cancelBtn);
 
     everyList.append(elItem, elBtn);
-    modalBody.appendChild(everyList);
+    dailyModalBody.appendChild(everyList);
 
     // 입력 포커스
     label.contentEditable = true;
@@ -218,7 +235,7 @@ plusBtn.addEventListener("click", function() {
 });
 
 // 삭제 혹은 저장
-modalBody.addEventListener('click', (e) => {
+dailyModalBody.addEventListener('click', (e) => {
     // closest : 자신과 조상 요소 중에서 가장 가까운 요소
     const cancelBtn = e.target.closest('.elCancel');
     const saveBtn = e.target.closest('.elSave');
@@ -327,3 +344,42 @@ modalBody.addEventListener('click', (e) => {
         elBtn.append(saveBtn, cancelBtn);
     }
 });
+
+
+// ******************하루하루일정 modal *************************************************
+const dayPlusBtn = document.querySelector('#dayPlus');
+const dayModalBody = document.querySelector('#day-modal .modal-body');
+
+addBtn.addEventListener("click", function() {
+    document.getElementById('day-modal')?.classList.add('open');
+
+    // 클릭한 날짜 가져오기
+    const selectedDayElem = document.querySelector('.days > .day[style*="var(--main)"]');
+    let selectDay = selectedDayElem.textContent
+
+    document.querySelector('#day-modal .modal-header h2').textContent = `${selectDay}일`;
+
+    // 초기화
+    dayModalBody.innerHTML = ''; 
+    
+    // 반복일정을 가져온다.
+    document.querySelectorAll('.everyList').forEach(d => {
+        // 수정하지 못하도록 버튼영역은 제거
+        const clone = d.cloneNode(true);
+        const btnArea = clone.querySelector('.elBtn');
+
+        // label의 for, checkbox id 변경
+        const label = clone.querySelector('label');
+        const oldFor = label.getAttribute('for');
+
+        const checkbox = clone.querySelector('input[type="checkbox"]');
+        const oldChkboxId = checkbox.id;
+
+
+        btnArea.remove();
+
+        dayModalBody.appendChild(clone);
+    });    
+});
+
+
