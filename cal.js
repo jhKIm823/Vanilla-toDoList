@@ -214,6 +214,7 @@ dailyPlusBtn.addEventListener("click", function() {
     const saveBtn = document.createElement('button');
     saveBtn.type = 'button';
     saveBtn.className = 'elSave';
+
     // 아이콘/태그는 innerHTML 사용
     saveBtn.innerHTML = '<span class="material-symbols-outlined">check</span>';
 
@@ -308,6 +309,8 @@ dailyModalBody.addEventListener('click', (e) => {
         cancelBtn.innerHTML = '<span class="material-symbols-outlined">close</span>';
 
         elBtn.append(editBtn, cancelBtn);
+
+        // 모든 요일에 일정추가
     }
 
     // 수정
@@ -367,16 +370,17 @@ addBtn.addEventListener("click", function() {
         // 수정하지 못하도록 버튼영역은 제거
         const clone = d.cloneNode(true);
         const btnArea = clone.querySelector('.elBtn');
+        btnArea.remove();
+
+        // 고유 ID 생성
+        const id = `elCheck-${(crypto.randomUUID && crypto.randomUUID()) || Date.now()}`;
 
         // label의 for, checkbox id 변경
         const label = clone.querySelector('label');
-        const oldFor = label.getAttribute('for');
+        label.setAttribute('for', id);
 
         const checkbox = clone.querySelector('input[type="checkbox"]');
-        const oldChkboxId = checkbox.id;
-
-
-        btnArea.remove();
+        checkbox.id = id;
 
         dayModalBody.appendChild(clone);
     });    
